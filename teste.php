@@ -1,27 +1,27 @@
 <?php
 
-use Alura\Leilao\Model\Lance;
-use Alura\Leilao\Model\Leilao;
-use Alura\Leilao\Model\Usuario;
-use Alura\Leilao\Service\Avaliador;
+use Alura\Auction\Model\Auction;
+use Alura\Auction\Model\Bid;
+use Alura\Auction\Model\User;
+use Alura\Auction\Service\Evaluator;
 
 require 'vendor/autoload.php';
 
 // Arrange - Given
-$leilao = new Leilao('Fiat 147 0KM');
+$auction = new Auction('Fiat 147 0KM');
 
-$maria = new Usuario('Maria');
-$joao = new Usuario('João');
+$maria = new User('Maria');
+$joao = new User('João');
 
-$leilao->recebeLance(new Lance($joao, 2000));
-$leilao->recebeLance(new Lance($maria, 2500));
+$auction->receivesBid(new Bid($joao, 2000));
+$auction->receivesBid(new Bid($maria, 2500));
 
-$leiloeiro = new Avaliador();
+$leiloeiro = new Evaluator();
 
 // Act - When
-$leiloeiro->avalia($leilao);
+$leiloeiro->avalia($auction);
 
-$maiorValor = $leiloeiro->getMaiorValor();
+$maiorValor = $leiloeiro->getGreaterValue();
 
 // Assert - Then
 $valorEsperado = 2500;
