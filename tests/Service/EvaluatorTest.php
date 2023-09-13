@@ -27,7 +27,7 @@ class EvaluatorTest extends TestCase
         $auctioneer = new Evaluator();
 
         // Act - When
-        $auctioneer->avalia($auction);
+        $auctioneer->evaluate($auction);
         $highestValue = $auctioneer->getGreaterValue();
         $lowerValue = $auctioneer->getLowerValue();
 
@@ -36,27 +36,27 @@ class EvaluatorTest extends TestCase
         self::assertEquals(17000, $highestValue);
     }
 
-    public function testReturnLowerValue()
+    public function testFindHighestBids()
     {
         $auction = new Auction('Fiat 147 0KM');
 
-        $cleber = new User('Cleber');
-        $fernando = new User('Fernando');
+        $joao = new User('João');
+        $maria = new User('Maria');
+        $ana = new User('Ana');
+        $jorge = new User('Jorge');
 
-        $auction->receivesBid(new Bid($cleber, 9000));
-        $auction->receivesBid(new Bid($fernando, 11000));
-        $auction->receivesBid(new Bid($fernando, 1000));
-        $auction->receivesBid(new Bid($fernando, 10000));
+        $auction->receivesBid(new Bid($ana, 1500));
+        $auction->receivesBid(new Bid($joao, 1000));
+        $auction->receivesBid(new Bid($maria, 2000));
+        $auction->receivesBid(new Bid($jorge, 1700));
 
         $auctioneer = new Evaluator();
+        $auctioneer->evaluate($auction);
 
-        // Act - When
-        $auctioneer->avalia($auction);
-        $highestValue = $auctioneer->getGreaterValue();
-        $lowerValue = $auctioneer->getLowerValue();
-
-        // Assert - Then
-        self::assertEquals(11000, $highestValue);
-        self::assertEquals(1000, $lowerValue);
+        $highestBids = $auctioneer->getHighestBids();
+        self::assertCount(3, $highestBids);
+        self::assertEquals(2000, $highestBids[0]);
+        self::assertEquals(1700, $highestBids[1]);
+        self::assertEquals(1500, $highestBids[2]);
     }
 }
