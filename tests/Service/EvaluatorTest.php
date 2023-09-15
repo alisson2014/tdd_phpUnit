@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Alura\Auction\Tests\Service;
 
 use Alura\Auction\Model\Auction;
@@ -14,7 +16,7 @@ class EvaluatorTest extends TestCase
     #[DataProvider('auctionInRandomOrder')]
     #[DataProvider('auctionInAscendingOrder')]
     #[DataProvider('auctionInDescendingOrder')]
-    public function testReturnLowerValue(Auction $auction)
+    public function testReturnLowerValue(Auction $auction): void
     {
         $auctioneer = new Evaluator();
 
@@ -29,7 +31,7 @@ class EvaluatorTest extends TestCase
     #[DataProvider('auctionInRandomOrder')]
     #[DataProvider('auctionInAscendingOrder')]
     #[DataProvider('auctionInDescendingOrder')]
-    public function testReturnHighestValue(Auction $auction)
+    public function testReturnHighestValue(Auction $auction): void
     {
         $auctioneer = new Evaluator();
 
@@ -44,7 +46,7 @@ class EvaluatorTest extends TestCase
     #[DataProvider('auctionInRandomOrder')]
     #[DataProvider('auctionInAscendingOrder')]
     #[DataProvider('auctionInDescendingOrder')]
-    public function testFindHighestBids(Auction $auction)
+    public function testFindHighestBids(Auction $auction): void
     {
         $auctioneer = new Evaluator();
         $auctioneer->evaluate($auction);

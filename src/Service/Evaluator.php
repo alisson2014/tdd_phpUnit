@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Alura\Auction\Service;
 
 use Alura\Auction\Model\Auction;
