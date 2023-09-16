@@ -12,6 +12,44 @@ use PHPUnit\Framework\TestCase;
 
 class AuctionTest extends TestCase
 {
+    public function testAuctionShouldNotAcceptMoreThanFiveBidsPerUser()
+    {
+        $auction = new Auction('Brasília Amarela');
+        $joao = new User('João');
+        $maria = new User('Maria');
+
+        $auction->receivesBid(new Bid($joao, 1000));
+        $auction->receivesBid(new Bid($maria, 1500));
+        $auction->receivesBid(new Bid($joao, 2000));
+        $auction->receivesBid(new Bid($maria, 2500));
+        $auction->receivesBid(new Bid($joao, 3000));
+        $auction->receivesBid(new Bid($maria, 3500));
+        $auction->receivesBid(new Bid($joao, 4000));
+        $auction->receivesBid(new Bid($maria, 4500));
+        $auction->receivesBid(new Bid($joao, 5000));
+        $auction->receivesBid(new Bid($maria, 5500));
+        $auction->receivesBid(new Bid($joao, 6000));
+
+        $lastBid = $auction->getBids()[array_key_last($auction->getBids())];
+
+        self::assertCount(10, $auction->getBids());
+        self::assertEquals(5500, $lastBid->getValue());
+    }
+
+    public function testAuctionShouldNotReceiveRepeatedBids()
+    {
+        $auction = new Auction('Variante');
+        $ana = new User('Ana');
+
+        $auction->receivesBid(new Bid($ana, 1000));
+        $auction->receivesBid(new Bid($ana, 1500));
+
+        $firstBid = $auction->getBids()[0];
+
+        self::assertCount(1, $auction->getBids());
+        self::assertEquals(1000, $firstBid->getValue());
+    }
+
     #[DataProvider('bidGenerator')]
     public function testAuctionMustReceiveBids(
         int $numberOfBids,

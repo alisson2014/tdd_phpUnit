@@ -1,4 +1,6 @@
 Auction (Alura\Auction\Tests\Model\Auction)
+ [x] Auction should not accept more than five bids per user
+ [x] Auction should not receive repeated bids
  [x] Auction must receive bids with data set "two-bids"
  [x] Auction must receive bids with data set "one-bid"
 
