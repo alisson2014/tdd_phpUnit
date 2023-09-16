@@ -19,9 +19,7 @@ class Auction
         $this->bids[] = $bid;
     }
 
-    /**
-     * @return Bid[]
-     */
+    /** @return Bid[] */
     public function getBids(): array
     {
         return $this->bids;
