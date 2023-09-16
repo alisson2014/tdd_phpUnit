@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Alura\Auction\Service;
 
 use Alura\Auction\Model\Auction;
+use Alura\Auction\Model\Bid;
 
 class Evaluator
 {
@@ -14,16 +15,20 @@ class Evaluator
 
     public function evaluate(Auction $auction): void
     {
-        $bidValues = array_map(function ($bid) {
+        $returnBid = function (Bid $bid): float {
             return $bid->getValue();
-        }, $auction->getBids());
+        };
+
+        $bidValues = array_map($returnBid, $auction->getBids());
 
         $this->lowerValue = min($bidValues);
         $this->highestValue = max($bidValues);
 
-        usort($bidValues, function (float $bid1, float $bid2) {
+        $sortBids = function (float $bid1, float $bid2): float {
             return $bid2 - $bid1;
-        });
+        };
+
+        usort($bidValues, $sortBids);
 
         $this->highestBids = array_slice($bidValues, 0, 3);
     }
