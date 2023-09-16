@@ -1,0 +1,15 @@
+Auction (Alura\Auction\Tests\Model\Auction)
+ [x] Auction must receive bids with data set "two-bids"
+ [x] Auction must receive bids with data set "one-bid"
+
+Evaluator (Alura\Auction\Tests\Service\Evaluator)
+ [x] Return lower value with data set "random-order"
+ [x] Return lower value with data set "ascending-order"
+ [x] Return lower value with data set "descending-order"
+ [x] Return highest value with data set "random-order"
+ [x] Return highest value with data set "ascending-order"
+ [x] Return highest value with data set "descending-order"
+ [x] Find highest bids with data set "random-order"
+ [x] Find highest bids with data set "ascending-order"
+ [x] Find highest bids with data set "descending-order"
+
