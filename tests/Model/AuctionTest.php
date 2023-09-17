@@ -14,6 +14,9 @@ class AuctionTest extends TestCase
 {
     public function testAuctionShouldNotAcceptMoreThanFiveBidsPerUser()
     {
+        self::expectException(\DomainException::class);
+        self::expectExceptionMessage('Usuário não propor mais de 5 lances por leilão');
+
         $auction = new Auction('Brasília Amarela');
         $joao = new User('João');
         $maria = new User('Maria');
@@ -29,25 +32,18 @@ class AuctionTest extends TestCase
         $auction->receivesBid(new Bid($joao, 5000));
         $auction->receivesBid(new Bid($maria, 5500));
         $auction->receivesBid(new Bid($joao, 6000));
-
-        $lastBid = $auction->getBids()[array_key_last($auction->getBids())];
-
-        self::assertCount(10, $auction->getBids());
-        self::assertEquals(5500, $lastBid->getValue());
     }
 
     public function testAuctionShouldNotReceiveRepeatedBids()
     {
+        self::expectException(\DomainException::class);
+        self::expectExceptionMessage('Usuário não pode propor 2 lances seguidos');
+
         $auction = new Auction('Variante');
         $ana = new User('Ana');
 
         $auction->receivesBid(new Bid($ana, 1000));
         $auction->receivesBid(new Bid($ana, 1500));
-
-        $firstBid = $auction->getBids()[0];
-
-        self::assertCount(1, $auction->getBids());
-        self::assertEquals(1000, $firstBid->getValue());
     }
 
     #[DataProvider('bidGenerator')]

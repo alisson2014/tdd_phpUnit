@@ -8,6 +8,7 @@ class Auction
 {
     /** @var Bid[] */
     private array $bids = [];
+    private bool $status = true;
 
     public function __construct(
         private string $description
@@ -17,16 +18,26 @@ class Auction
     public function receivesBid(Bid $bid): void
     {
         if (!empty($this->bids) && $this->isFromTheLastUser($bid)) {
-            return;
+            throw new \DomainException('Usuário não pode propor 2 lances seguidos');
         }
 
         $totalBidsPerUser = $this->numberOfBidsPerUser($bid->getUser());
 
         if ($totalBidsPerUser >= 5) {
-            return;
+            throw new \DomainException('Usuário não propor mais de 5 lances por leilão');
         }
 
         $this->bids[] = $bid;
+    }
+
+    public function ends(): void
+    {
+        $this->status = false;
+    }
+
+    public function getStatus(): bool
+    {
+        return $this->status;
     }
 
     /** @return Bid[] */

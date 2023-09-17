@@ -8,11 +8,13 @@ use Alura\Auction\Model\Auction;
 use Alura\Auction\Model\Bid;
 use Alura\Auction\Model\User;
 use Alura\Auction\Service\Evaluator;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class EvaluatorTest extends TestCase
 {
+    /** @var Evaluator */
     private Evaluator $auctioneer;
 
     protected function setUp(): void
@@ -38,8 +40,6 @@ class EvaluatorTest extends TestCase
     #[DataProvider('auctionInDescendingOrder')]
     public function testReturnHighestValue(Auction $auction): void
     {
-
-
         // Act - When
         $this->auctioneer->evaluate($auction);
         $highestValue = $this->auctioneer->getGreaterValue();
@@ -61,6 +61,28 @@ class EvaluatorTest extends TestCase
         self::assertEquals(2500, $highestBids[0]);
         self::assertEquals(2000, $highestBids[1]);
         self::assertEquals(1700, $highestBids[2]);
+    }
+
+    public function testEmptyAuctionCantBeEvaluated()
+    {
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Não é possível avaliar leilão vazio');
+
+        $auction = new Auction('Fusca Azul');
+        $this->auctioneer->evaluate($auction);
+    }
+
+    public function testEndedAuctionCantBeEvaluated()
+    {
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage('Leilão já finalizado');
+
+        $auction = new Auction('Fiat 147 0KM');
+        $auction->receivesBid(new Bid(new User('Teste'), 2000));
+
+        $auction->ends();
+
+        $this->auctioneer->evaluate($auction);
     }
 
     public static function auctionInAscendingOrder(): array

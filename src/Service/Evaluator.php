@@ -15,6 +15,14 @@ class Evaluator
 
     public function evaluate(Auction $auction): void
     {
+        if (!$auction->getStatus()) {
+            throw new \DomainException('Leilão já finalizado');
+        }
+
+        if (empty($auction->getBids())) {
+            throw new \DomainException('Não é possível avaliar leilão vazio');
+        }
+
         $returnBid = function (Bid $bid): float {
             return $bid->getValue();
         };
